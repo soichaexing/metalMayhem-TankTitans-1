@@ -11,4 +11,5 @@ package policewarrior;
 public abstract class Entity {
     protected int HP, ATK, DEF;
     protected int x, y;
+    
 }
