@@ -13,6 +13,7 @@ public abstract class Entity {
     /* Properti Dasar */
     protected int HP, ATK, DEF;
     protected int x, y;
+    protected int res;
 
     /* Properti untuk display (termasuk animasi) */
     protected PImage[] idle;
@@ -35,5 +36,9 @@ public abstract class Entity {
 
     public int getY() {
         return y;
+    }
+
+    public int getRes() {
+        return res;
     }
 }

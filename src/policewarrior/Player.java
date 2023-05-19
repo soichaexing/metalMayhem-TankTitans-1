@@ -15,13 +15,14 @@ public class Player extends Entity implements SpriteAnimation {
         super.reset_frame = -1;
     }
 
-    public Player(PImage[] idle, int x, int y) {
+    public Player(PImage[] idle, int x, int y, int res) {
         super(0, 0, 0, x, y);
         super.idle = idle;
         super.timing = 3;
         super.frame = 0;
         super.total_frame = 1;
         super.reset_frame = -1;
+        super.res = res;
     }
 
     public void drawIdle(PApplet app, int frame_ctr){
@@ -36,7 +37,7 @@ public class Player extends Entity implements SpriteAnimation {
             if(frame > total_frame - 1){
                 frame = 0;
             }
-            app.image(this.idle[frame], x, y, 64, 64);
+            app.image(this.idle[frame], x, y, res, res);
 //        }
     }
 
