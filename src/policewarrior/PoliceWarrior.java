@@ -31,13 +31,16 @@ public class PoliceWarrior extends PApplet {
     private PImage[] temp_bullet;
     private PImage[] temp_enemy;
     private int frame_ctr = 0;
+    private int max_bullet = 100;
+    private int enemy_rows = 1;
 
     /* Status sprite */
     private boolean idle = true;
     private boolean running = false;
 
     /* Gerak Sprite */
-    private boolean pressed = false;
+    private int limit_movement = 1;
+    private int movement_ctr = 0;
     private boolean up = false;
     private boolean down = false;
     private boolean left = false;
@@ -68,7 +71,7 @@ public class PoliceWarrior extends PApplet {
         for (int i = 0; i < temp_player.length; i++) {
             temp_player[i] = loadImage("src/assets/player/Idle/(" + (i + 1) + ").png");
         }
-        p = new Player(temp_player, 150, 360, 64);
+        p = new Player(temp_player, 192, 328, 64);
 
         /* Bullets */
         bullets = new ArrayList<>();
@@ -86,8 +89,14 @@ public class PoliceWarrior extends PApplet {
     }
 
     public void draw() {
-        background(bg);
-        p.movement(up, down, left, right);
+        background(255);
+        if (running) {
+            if (movement_ctr < limit_movement) {
+                System.out.println("mvm: " + movement_ctr);
+                p.movement(up, down, left, right);
+                movement_ctr++;
+            }
+        }
         p.drawIdle(this, frame_ctr);
         enemiesMechanism();
         bulletMechanism();
@@ -96,14 +105,62 @@ public class PoliceWarrior extends PApplet {
 
     private void enemiesMechanism() {
         if (enemies.size() == 0) {
-            int[] y_spawn = new int[3];
-            y_spawn[0] = 170;
-            y_spawn[1] = 340;
-            y_spawn[2] = 510;
+            int gap = 32/2;
+            int[] y_spawn = new int[enemy_rows];
 
-            for (int i = 0; i < 3; i++) {
+            /* Enemy positioning */
+            if (enemy_rows == 1) {
+                y_spawn[0] = 680/2;
+            } else if (enemy_rows == 2) {
+                y_spawn[0] = 680/2 + gap - 32 - gap;
+                y_spawn[1] = 680/2 + gap + 32 - gap;
+            } else if (enemy_rows == 3) {
+                y_spawn[0] = 680/2;
+                y_spawn[1] = 680/2 - 32 - gap;
+                y_spawn[2] = 680/2 + 32 + gap;
+            } else if (enemy_rows == 4) {
+                y_spawn[0] = 680/2 + gap - 32 - gap;
+                y_spawn[1] = 680/2 + gap + 32 - gap;
+                y_spawn[2] = 680/2 + gap - 32 - gap - 32 - gap;
+                y_spawn[3] = 680/2 + gap + 32 - gap + 32 + gap;
+            } else if (enemy_rows == 5) {
+                y_spawn[0] = 680/2;
+                y_spawn[1] = 680/2 - 32 - gap;
+                y_spawn[2] = 680/2 + 32 + gap;
+                y_spawn[3] = 680/2 - 32 - gap - 32 - gap;
+                y_spawn[4] = 680/2 + 32 + gap + 32 + gap;
+            } else if (enemy_rows == 6) {
+                y_spawn[0] = 680/2 + gap - 32 - gap;
+                y_spawn[1] = 680/2 + gap + 32 - gap;
+                y_spawn[2] = 680/2 + gap - 32 - gap - 32 - gap;
+                y_spawn[3] = 680/2 + gap + 32 - gap + 32 + gap;
+                y_spawn[4] = 680/2 + gap - 32 - gap - 32 - gap - 32 - gap;
+                y_spawn[5] = 680/2 + gap + 32 - gap + 32 + gap + 32 + gap;
+            } else {
+                if (enemy_rows % 2 == 0) {
+                    int reference_line = 680 / 2 + gap;
+                    for (int i = 0; i < enemy_rows; i++) {
+                        if (i % 2 == 0) {
+                            y_spawn[i] = reference_line - 32 - gap;
+                            reference_line = reference_line - gap;
+                        } else {
+                            y_spawn[i] = reference_line - 32 - gap;
+                            reference_line = y_spawn[i];
+                        }
+                    }
+                } else {
+
+                }
+            }
+
+            for (int i = 0; i < enemy_rows; i++) {
                 System.out.println("Enemy " + i);
-                enemies.add(new Enemy(temp_enemy, 1130, y_spawn[i], 64));
+                enemies.add(new Enemy(temp_enemy, 1130, y_spawn[i], 32));
+            }
+
+            enemy_rows++;
+            if (enemy_rows >= 6) {
+                enemy_rows = 6;
             }
         } else {
             for (int i = enemies.size() - 1; i >= 0; i--) {
@@ -117,7 +174,7 @@ public class PoliceWarrior extends PApplet {
         /* Generate bullet saat tekan spasi */
         int bullet_distance = 5;
         if (fire) {
-            if (bullets.size() <= 10) {
+            if (bullets.size() <= max_bullet) {
                 bullets.add(new Bullet(temp_bullet, p.getX() + bullet_distance, p.getY(), 64));
             }
             System.out.println("Test");
@@ -157,36 +214,26 @@ public class PoliceWarrior extends PApplet {
                 /* Kena dong BOOM */
                 if (hit) {
                     bullets.remove(i);
-                    System.out.println("DUARRRRR!!!!!");
+                    System.out.println("DUARRRRR!!!!!, enemy sisa " + enemies.size());
                 }
             }
         }
     }
 
     public void keyPressed() {
-        if(key == 'w') {pressed = true; up = true; running = true; idle = false;}
-        if(key == 's') {pressed = true; down = true; running = true; idle = false;}
-        if(key == 'a') {pressed = true; left = true; running = true; idle = false;}
-        if(key == 'd') {pressed = true; right = true; running = true; idle = false;}
-        if(key == ' ') {fire = true; boom = false;}
+        if(key == 'w') {up = true; running = true; idle = false;}
+        if(key == 's') {down = true; running = true; idle = false;}
+//        if(key == 'a') {left = true; running = true; idle = false;}
+//        if(key == 'd') {right = true; running = true; idle = false;}
+
+        if(key == ' ') {fire = true;}
     }
 
     public void keyReleased() {
-        int move_ctr = 0;
-        if()
-
-        if () {
-        }
-
-        if (!pressed) {
-            up = false;
-            down = false;
-            left = false;
-            right = false;
-            running = false;
-            idle = true;
-
-            pressed = false;
-        }
+        if(key == 'w') {up = false; running = false; idle = true; movement_ctr = 0;}
+        if(key == 's') {down = false; running = false; idle = true; movement_ctr = 0;}
+        if(key == 'a') {left = false; running = false; idle = true; movement_ctr = 0;}
+        if(key == 'd') {right = false; running = false; idle = true; movement_ctr = 0;}
+        if(key == ' ') {fire = false;}
     }
 }

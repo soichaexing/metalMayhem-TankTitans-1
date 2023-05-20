@@ -5,6 +5,7 @@ import processing.core.PImage;
 
 public class Player extends Entity implements SpriteAnimation {
     protected String nama;
+    protected int movement_speed;
 
     public Player(PImage[] idle, int x, int y, int HP, int ATK, int DEF) {
         super(HP, ATK, DEF, x, y);
@@ -23,6 +24,7 @@ public class Player extends Entity implements SpriteAnimation {
         super.total_frame = 1;
         super.reset_frame = -1;
         super.res = res;
+        this.movement_speed = 25;
     }
 
     public void drawIdle(PApplet app, int frame_ctr){
@@ -42,9 +44,9 @@ public class Player extends Entity implements SpriteAnimation {
     }
 
     public void movement(boolean up, boolean down, boolean left, boolean right) {
-        if (up) y -= 5;
-        if (down) y += 5;
-        if (left) x -= 5;
-        if (right) x += 5;
+        if (up) y -= movement_speed;
+        if (down) y += movement_speed;
+        if (left) x -= movement_speed;
+        if (right) x += movement_speed;
     }
 }
