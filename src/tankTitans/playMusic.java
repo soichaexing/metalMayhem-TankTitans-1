@@ -27,7 +27,15 @@ public class playMusic {
                 System.out.println("File tidak ada");
             }
         } catch (Exception e) {
-
+            System.out.println(e);
         }
+    }
+
+    public void stop(){
+        clip.stop();
+    }
+
+    public void changeSound(String newPath) {
+        this.file_path = newPath;
     }
 }
