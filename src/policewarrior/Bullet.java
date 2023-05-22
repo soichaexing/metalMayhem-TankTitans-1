@@ -5,14 +5,6 @@ import processing.core.PImage;
 
 public class Bullet extends Entity implements SpriteAnimation {
     protected int bullet_speed = 10;
-    public Bullet(PImage[] idle, int x, int y, int HP, int ATK, int DEF) {
-        super(HP, ATK, DEF, x, y);
-        super.idle = idle;
-        super.timing = 3;
-        super.frame = 0;
-        super.total_frame = 1;
-        super.reset_frame = -1;
-    }
 
     public Bullet(PImage[] idle, int x, int y, int res) {
         super(0, 0, 0, x, y);
@@ -35,7 +27,7 @@ public class Bullet extends Entity implements SpriteAnimation {
         if(frame > total_frame - 1){
             frame = 0;
         }
-        app.image(this.idle[frame], x, y, res, res);
+        app.image(this.idle[frame], x - (res / 2), y - (res / 2), res, res);
     }
 
     public void movement() {

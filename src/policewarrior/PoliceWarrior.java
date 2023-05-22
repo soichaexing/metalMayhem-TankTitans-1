@@ -67,11 +67,11 @@ public class PoliceWarrior extends PApplet {
         bg = loadImage("src/assets/background/background_1.png");
 
         /* Player */
-        PImage[] temp_player = new PImage[1];
+        PImage[] temp_player = new PImage[4];
         for (int i = 0; i < temp_player.length; i++) {
             temp_player[i] = loadImage("src/assets/player/Idle/(" + (i + 1) + ").png");
         }
-        p = new Player(temp_player, 192, 328, 64);
+        p = new Player(temp_player, 192, 360, 64);
 
         /* Bullets */
         bullets = new ArrayList<>();
@@ -82,7 +82,7 @@ public class PoliceWarrior extends PApplet {
 
         /* Enemy */
         enemies = new ArrayList<>();
-        temp_enemy = new PImage[1];
+        temp_enemy = new PImage[4];
         for (int i = 0; i < temp_enemy.length; i++) {
             temp_enemy[i] = loadImage("src/assets/enemy/Idle/(" + (i + 1) + ").png");
         }
@@ -90,6 +90,7 @@ public class PoliceWarrior extends PApplet {
 
     public void draw() {
         background(255);
+        testingFrame();
         if (running) {
             if (movement_ctr < limit_movement) {
                 System.out.println("mvm: " + movement_ctr);
@@ -98,9 +99,25 @@ public class PoliceWarrior extends PApplet {
             }
         }
         p.drawIdle(this, frame_ctr);
-        enemiesMechanism();
         bulletMechanism();
+        enemiesMechanism();
         frame_ctr++;
+    }
+
+    private void testingFrame() {
+        int center_y = 720 / 2;
+        int center_x = 1280 / 2;
+        int movement = 48;
+        line(0, center_y - (0 * movement), 1280, center_y - (0 * movement));
+        line(0, center_y - (1 * movement), 1280, center_y - (1 * movement));
+        line(0, center_y - (2 * movement), 1280, center_y - (2 * movement));
+        line(0, center_y - (3 * movement), 1280, center_y - (3 * movement));
+        line(0, center_y + (1 * movement), 1280, center_y + (1 * movement));
+        line(0, center_y + (2 * movement), 1280, center_y + (2 * movement));
+        line(0, center_y + (3 * movement), 1280, center_y + (3 * movement));
+
+        line(192, 0, 192, 720);
+        line(1280 - 192, 0, 1280 - 192, 720);
     }
 
     private void enemiesMechanism() {
@@ -110,57 +127,81 @@ public class PoliceWarrior extends PApplet {
 
             /* Enemy positioning */
             if (enemy_rows == 1) {
-                y_spawn[0] = 680/2;
+                y_spawn[0] = 360;
             } else if (enemy_rows == 2) {
-                y_spawn[0] = 680/2 + gap - 32 - gap;
-                y_spawn[1] = 680/2 + gap + 32 - gap;
+                y_spawn[0] = 360 - (1 * 48);
+                y_spawn[1] = 360 + (1 * 48);
             } else if (enemy_rows == 3) {
-                y_spawn[0] = 680/2;
-                y_spawn[1] = 680/2 - 32 - gap;
-                y_spawn[2] = 680/2 + 32 + gap;
+                y_spawn[0] = 360;
+                y_spawn[1] = 360 - (1 * 48);
+                y_spawn[2] = 360 + (1 * 48);
             } else if (enemy_rows == 4) {
-                y_spawn[0] = 680/2 + gap - 32 - gap;
-                y_spawn[1] = 680/2 + gap + 32 - gap;
-                y_spawn[2] = 680/2 + gap - 32 - gap - 32 - gap;
-                y_spawn[3] = 680/2 + gap + 32 - gap + 32 + gap;
+                y_spawn[0] = 360 - (1 * 48);
+                y_spawn[1] = 360 + (1 * 48);
+                y_spawn[2] = 360 - (2 * 48);
+                y_spawn[3] = 360 + (2 * 48);
             } else if (enemy_rows == 5) {
-                y_spawn[0] = 680/2;
-                y_spawn[1] = 680/2 - 32 - gap;
-                y_spawn[2] = 680/2 + 32 + gap;
-                y_spawn[3] = 680/2 - 32 - gap - 32 - gap;
-                y_spawn[4] = 680/2 + 32 + gap + 32 + gap;
+                y_spawn[0] = 360;
+                y_spawn[1] = 360 - (1 * 48);
+                y_spawn[2] = 360 + (1 * 48);
+                y_spawn[3] = 360 - (2 * 48);
+                y_spawn[4] = 360 + (2 * 48);
             } else if (enemy_rows == 6) {
-                y_spawn[0] = 680/2 + gap - 32 - gap;
-                y_spawn[1] = 680/2 + gap + 32 - gap;
-                y_spawn[2] = 680/2 + gap - 32 - gap - 32 - gap;
-                y_spawn[3] = 680/2 + gap + 32 - gap + 32 + gap;
-                y_spawn[4] = 680/2 + gap - 32 - gap - 32 - gap - 32 - gap;
-                y_spawn[5] = 680/2 + gap + 32 - gap + 32 + gap + 32 + gap;
-            } else {
-                if (enemy_rows % 2 == 0) {
-                    int reference_line = 680 / 2 + gap;
-                    for (int i = 0; i < enemy_rows; i++) {
-                        if (i % 2 == 0) {
-                            y_spawn[i] = reference_line - 32 - gap;
-                            reference_line = reference_line - gap;
-                        } else {
-                            y_spawn[i] = reference_line - 32 - gap;
-                            reference_line = y_spawn[i];
-                        }
-                    }
-                } else {
-
-                }
+                y_spawn[0] = 360 - (1 * 48);
+                y_spawn[1] = 360 + (1 * 48);
+                y_spawn[2] = 360 - (2 * 48);
+                y_spawn[3] = 360 + (2 * 48);
+                y_spawn[4] = 360 - (3 * 48);
+                y_spawn[5] = 360 + (3 * 48);
+            } else if (enemy_rows == 7) {
+                y_spawn[0] = 360;
+                y_spawn[1] = 360 - (1 * 48);
+                y_spawn[2] = 360 + (1 * 48);
+                y_spawn[3] = 360 - (2 * 48);
+                y_spawn[4] = 360 + (2 * 48);
+                y_spawn[5] = 360 - (3 * 48);
+                y_spawn[6] = 360 + (3 * 48);
+            } else if (enemy_rows == 9) {
+                y_spawn[0] = 360;
+                y_spawn[1] = 360 - (1 * 48);
+                y_spawn[2] = 360 + (1 * 48);
+                y_spawn[3] = 360 - (2 * 48);
+                y_spawn[4] = 360 + (2 * 48);
+                y_spawn[5] = 360 - (3 * 48);
+                y_spawn[6] = 360 + (3 * 48);
+                y_spawn[7] = 360 - (4 * 48);
+                y_spawn[8] = 360 + (4 * 48);
             }
+//            else {
+//                if (enemy_rows % 2 == 0) {
+//                    int reference_line = 640 / 2 + gap;
+//                    for (int i = 0; i < enemy_rows; i++) {
+//                        if (i % 2 == 0) {
+//                            y_spawn[i] = reference_line - 32 - gap;
+//                            reference_line = reference_line - gap;
+//                        } else {
+//                            y_spawn[i] = reference_line - 32 - gap;
+//                            reference_line = y_spawn[i];
+//                        }
+//                    }
+//                } else {
+//
+//                }
+//            }
 
             for (int i = 0; i < enemy_rows; i++) {
                 System.out.println("Enemy " + i);
-                enemies.add(new Enemy(temp_enemy, 1130, y_spawn[i], 32));
+                enemies.add(new Enemy(temp_enemy, 1280 - 192, y_spawn[i], 32));
             }
 
-            enemy_rows++;
-            if (enemy_rows >= 6) {
-                enemy_rows = 6;
+            if (enemy_rows < 5) {
+                enemy_rows++;
+            } else {
+                enemy_rows += 2;
+
+                if (enemy_rows > 9) {
+                    enemy_rows = 9;
+                }
             }
         } else {
             for (int i = enemies.size() - 1; i >= 0; i--) {

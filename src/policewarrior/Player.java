@@ -7,24 +7,15 @@ public class Player extends Entity implements SpriteAnimation {
     protected String nama;
     protected int movement_speed;
 
-    public Player(PImage[] idle, int x, int y, int HP, int ATK, int DEF) {
-        super(HP, ATK, DEF, x, y);
-        super.idle = idle;
-        super.timing = 3;
-        super.frame = 0;
-        super.total_frame = 1;
-        super.reset_frame = -1;
-    }
-
     public Player(PImage[] idle, int x, int y, int res) {
         super(0, 0, 0, x, y);
         super.idle = idle;
         super.timing = 3;
         super.frame = 0;
-        super.total_frame = 1;
+        super.total_frame = 4;
         super.reset_frame = -1;
         super.res = res;
-        this.movement_speed = 25;
+        this.movement_speed = 32 + 16;
     }
 
     public void drawIdle(PApplet app, int frame_ctr){
@@ -39,7 +30,7 @@ public class Player extends Entity implements SpriteAnimation {
             if(frame > total_frame - 1){
                 frame = 0;
             }
-            app.image(this.idle[frame], x, y, res, res);
+            app.image(this.idle[frame], x - (res / 2), y - (res / 2), res, res);
 //        }
     }
 
