@@ -7,6 +7,7 @@ package tankTitans;
 import processing.core.PApplet;
 import processing.core.PImage;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -14,7 +15,7 @@ import java.util.Scanner;
 /**
  * @author Michael
  */
-public class PoliceWarrior extends PApplet {
+public class tankTitans extends PApplet {
     /* Default */
     private static final Random rnd = new Random();
     private static final Scanner sc = new Scanner(System.in);
@@ -22,19 +23,35 @@ public class PoliceWarrior extends PApplet {
     private static final int HEIGHT = 720;
     private static final int FPS = 60;
 
-    /* Untuk animasi | processing grafik */
+    /* Rounds */
+    private boolean is_mainMenu = true;
+    private boolean is_battle = true;
+
+    /**
+     *  Round: Main Menu
+     */
+    private PImage bg_mainMenu;
+    private GUIButton b_playGame = new GUIButton(360, 360, 100, 75, Color.CYAN);
+    private boolean click_playGame = false;
+
+    /**
+     * Round: Battle
+     */
+
+    /* Inialisasi untuk battle */
     /* List Unit/Entity seperti tank, bullet, dll. */
-    private PImage bg;
+    /* Note : ganti jadi local variable supaya tidak boros memori */
+    private PImage bg_battle;
     private Player p;
     private ArrayList<Bullet> bullets;
     private ArrayList<Enemy> enemies;
     private PImage[] temp_bullet;
     private PImage[] temp_enemy;
-    private int frame_ctr = 0;
     private int max_bullet = 100;
     private int enemy_rows = 1;
+    private int frame_ctr = 0;
 
-    /* Status sprite */
+    /* Status sprite player */
     private boolean idle = true;
     private boolean running = false;
 
@@ -50,21 +67,20 @@ public class PoliceWarrior extends PApplet {
 
     public static void main(String[] args) {
         // TODO code application logic here
-        PApplet.main("policewarrior.PoliceWarrior");
-    }
-
-    public void settings() {
-        size(WIDTH, HEIGHT);
+        PApplet.main("tankTitans.tankTitans");
     }
 
     /**
      * Inisialisasi objek
      * seperti karakter, player, npc, menu, image, dll.
      */
+    public void settings() {
+        size(WIDTH, HEIGHT);
+    }
     public void setup() {
-        /* Background a*/
+        /* Backgrounds */
         frameRate(FPS);
-        bg = loadImage("src/assets/background/background_1.png");
+        bg_mainMenu = loadImage("src/assets/background/background_1.png");
 
         /* Player */
         PImage[] temp_player = new PImage[4];
@@ -88,20 +104,30 @@ public class PoliceWarrior extends PApplet {
         }
     }
 
+    /**
+     * Main program
+     */
     public void draw() {
-        background(255);
-        testingFrame();
-        if (running) {
-            if (movement_ctr < limit_movement) {
-                System.out.println("mvm: " + movement_ctr);
-                p.movement(up, down, left, right);
-                movement_ctr++;
-            }
+        if (is_mainMenu) {
+            background(bg_mainMenu);
+            fill(255, 245, 248);
+            stroke(255, 245, 258);
+            rect(b_playGame.getX(), b_playGame.getY(), b_playGame.getWidth(), b_playGame.getHeight());
+        } else if (is_battle) {
+            background(255);
+            testingFrame();
+            p.movement(up, down, left, right);
+//        if (running) {
+//            if (movement_ctr < limit_movement) {
+//                System.out.println("mvm: " + movement_ctr);
+//                movement_ctr++;
+//            }
+//        }
+            p.drawIdle(this, frame_ctr);
+            bulletMechanism();
+            enemiesMechanism();
+            frame_ctr++;
         }
-        p.drawIdle(this, frame_ctr);
-        bulletMechanism();
-        enemiesMechanism();
-        frame_ctr++;
     }
 
     private void testingFrame() {
@@ -122,7 +148,7 @@ public class PoliceWarrior extends PApplet {
 
     private void enemiesMechanism() {
         if (enemies.size() == 0) {
-            int gap = 32/2;
+            int gap = 32 / 2;
             int[] y_spawn = new int[enemy_rows];
 
             /* Enemy positioning */
@@ -233,9 +259,9 @@ public class PoliceWarrior extends PApplet {
                     for (int j = enemies.size() - 1; j >= 0; j--) {
                         System.out.println("Hitbox " + i + ", " + j);
                         /* Penentuan hitbox */
-                        int bounding_left = enemies.get(j).getX() - enemies.get(j).getRes()/2;
-                        int bounding_top = enemies.get(j).getY() - enemies.get(j).getRes()/2;
-                        int bounding_bottom = enemies.get(j).getY() + enemies.get(j).getRes()/2;
+                        int bounding_left = enemies.get(j).getX() - enemies.get(j).getRes() / 2;
+                        int bounding_top = enemies.get(j).getY() - enemies.get(j).getRes() / 2;
+                        int bounding_bottom = enemies.get(j).getY() + enemies.get(j).getRes() / 2;
 
                         if (bullets.get(i).getX() >= bounding_left) {
                             if (bullets.get(i).getY() >= bounding_top && bullets.get(i).getY() <= bounding_bottom) {
@@ -262,19 +288,63 @@ public class PoliceWarrior extends PApplet {
     }
 
     public void keyPressed() {
-        if(key == 'w') {up = true; running = true; idle = false;}
-        if(key == 's') {down = true; running = true; idle = false;}
+        if (key == 'w') {
+            up = true;
+            running = true;
+            idle = false;
+        }
+        if (key == 's') {
+            down = true;
+            running = true;
+            idle = false;
+        }
 //        if(key == 'a') {left = true; running = true; idle = false;}
 //        if(key == 'd') {right = true; running = true; idle = false;}
 
-        if(key == ' ') {fire = true;}
+        if (key == ' ') {
+            fire = true;
+        }
     }
 
     public void keyReleased() {
-        if(key == 'w') {up = false; running = false; idle = true; movement_ctr = 0;}
-        if(key == 's') {down = false; running = false; idle = true; movement_ctr = 0;}
-        if(key == 'a') {left = false; running = false; idle = true; movement_ctr = 0;}
-        if(key == 'd') {right = false; running = false; idle = true; movement_ctr = 0;}
-        if(key == ' ') {fire = false;}
+        if (key == 'w') {
+            up = false;
+            running = false;
+            idle = true;
+            movement_ctr = 0;
+        }
+        if (key == 's') {
+            down = false;
+            running = false;
+            idle = true;
+            movement_ctr = 0;
+        }
+        if (key == 'a') {
+            left = false;
+            running = false;
+            idle = true;
+            movement_ctr = 0;
+        }
+        if (key == 'd') {
+            right = false;
+            running = false;
+            idle = true;
+            movement_ctr = 0;
+        }
+        if (key == ' ') {
+            fire = false;
+        }
+    }
+
+    private void update(int x, int y, GUIButton b) {
+
+    }
+
+    private boolean overRect(){
+        if (true) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

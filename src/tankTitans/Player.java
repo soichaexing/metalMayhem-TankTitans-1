@@ -15,7 +15,8 @@ public class Player extends Entity implements SpriteAnimation {
         super.total_frame = 4;
         super.reset_frame = -1;
         super.res = res;
-        this.movement_speed = 32 + 16;
+//        this.movement_speed = 32 + 16;
+        this.movement_speed = 5;
     }
 
     public void drawIdle(PApplet app, int frame_ctr){
