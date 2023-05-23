@@ -132,24 +132,27 @@ public class tankTitans extends PApplet {
         line(0, center_y - (1 * movement), 1280, center_y - (1 * movement));
         line(0, center_y - (2 * movement), 1280, center_y - (2 * movement));
         line(0, center_y - (3 * movement), 1280, center_y - (3 * movement));
+        line(0, center_y - (4 * movement), 1280, center_y - (4 * movement));
         line(0, center_y + (1 * movement), 1280, center_y + (1 * movement));
         line(0, center_y + (2 * movement), 1280, center_y + (2 * movement));
         line(0, center_y + (3 * movement), 1280, center_y + (3 * movement));
+        line(0, center_y + (4 * movement), 1280, center_y + (4 * movement));
 
         line(192, 0, 192, 720);
         line(1280 - 192, 0, 1280 - 192, 720);
+
+        fill(0, 0, 0);
+        stroke(0, 0, 0);
     }
 
     private void playerMechanism() {
-        boolean can_move = false;
-        if (p.getY() >= 360 - (4 * 48)) {
-            if (p.getX() <= 360 + (4 * 48)) {
-                can_move = true;
-            }
+        if (p.getY() < 360 - (4 * 48) - 32) {
+            up = false;
         }
-        if (can_move) {
-            p.movement(up, down, left, right);
+        if (p.getY() > 360 + (4 * 48) + 32) {
+            down = false;
         }
+        p.movement(up, down, left, right);
 //        if (running) {
 //            if (movement_ctr < limit_movement) {
 //                System.out.println("mvm: " + movement_ctr);
@@ -316,6 +319,9 @@ public class tankTitans extends PApplet {
 
         if (key == ' ') {
             fire = true;
+        }
+        if (key == 'x') {
+            System.out.println(p.getX() + ", " + p.getY());
         }
     }
 
