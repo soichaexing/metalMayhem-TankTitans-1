@@ -109,6 +109,7 @@ public class tankTitans extends PApplet {
      */
     public void draw() {
         if (is_mainMenu) {
+            update(mouseX, mouseY, b_playGame);
             background(bg_mainMenu);
             fill(255, 245, 248);
             stroke(255, 245, 258);
@@ -116,14 +117,7 @@ public class tankTitans extends PApplet {
         } else if (is_battle) {
             background(255);
             testingFrame();
-            p.movement(up, down, left, right);
-//        if (running) {
-//            if (movement_ctr < limit_movement) {
-//                System.out.println("mvm: " + movement_ctr);
-//                movement_ctr++;
-//            }
-//        }
-            p.drawIdle(this, frame_ctr);
+            playerMechanism();
             bulletMechanism();
             enemiesMechanism();
             frame_ctr++;
@@ -144,6 +138,25 @@ public class tankTitans extends PApplet {
 
         line(192, 0, 192, 720);
         line(1280 - 192, 0, 1280 - 192, 720);
+    }
+
+    private void playerMechanism() {
+        boolean can_move = false;
+        if (p.getY() >= 360 - (4 * 48)) {
+            if (p.getX() <= 360 + (4 * 48)) {
+                can_move = true;
+            }
+        }
+        if (can_move) {
+            p.movement(up, down, left, right);
+        }
+//        if (running) {
+//            if (movement_ctr < limit_movement) {
+//                System.out.println("mvm: " + movement_ctr);
+//                movement_ctr++;
+//            }
+//        }
+        p.drawIdle(this, frame_ctr);
     }
 
     private void enemiesMechanism() {
@@ -336,12 +349,23 @@ public class tankTitans extends PApplet {
         }
     }
 
-    private void update(int x, int y, GUIButton b) {
-
+    public void mousePressed(){
+        if (click_playGame) {
+            is_mainMenu = false;
+            is_battle = true;
+        }
     }
 
-    private boolean overRect(){
-        if (true) {
+    void update(int x, int y, GUIButton b) {
+        if ( overRect(b_playGame.getX(), b_playGame.getY(), b_playGame.getWidth(), b_playGame.getHeight()) ) {
+            click_playGame = true;
+        } else {
+            click_playGame = false;
+        }
+    }
+
+    private boolean overRect(int x, int y, int width, int height){
+        if (mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height) {
             return true;
         } else {
             return false;
