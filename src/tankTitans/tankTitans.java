@@ -6,18 +6,14 @@ package tankTitans;
 
 import processing.core.PApplet;
 import processing.core.PImage;
-
 import java.awt.*;
-import java.util.Random;
-import java.util.Scanner;
+
 
 /**
  * @author Michael
  */
 public class tankTitans extends PApplet {
     /* Default */
-    private static final Random rnd = new Random();
-    private static final Scanner sc = new Scanner(System.in);
     private static final int WIDTH = 1280;
     private static final int HEIGHT = 720;
     private static final int FPS = 60;
@@ -44,6 +40,7 @@ public class tankTitans extends PApplet {
     public void settings() {
         size(WIDTH, HEIGHT);
     }
+    
     public void setup() {
         /* Backgrounds */
         frameRate(FPS);
@@ -59,6 +56,7 @@ public class tankTitans extends PApplet {
             background(bg_mainMenu);
             fill(255, 245, 248);
             stroke(255, 245, 258);
+            
             rect(b_playGame.getX(), b_playGame.getY(), b_playGame.getWidth(), b_playGame.getHeight());
         }
     }
