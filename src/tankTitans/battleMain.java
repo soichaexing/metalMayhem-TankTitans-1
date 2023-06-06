@@ -59,6 +59,7 @@ public class battleMain extends PApplet {
     private boolean right = false;
     private boolean fire = false;
     private boolean boom = false;
+    private boolean game_over = false;
 
 //    public static void main(String[] args) {
 //        // TODO code application logic here
@@ -115,12 +116,30 @@ public class battleMain extends PApplet {
     public void draw() {
         if (is_battle) {
             background(255);
+            statsDisplay();
             testingFrame();
             playerMechanism();
             bulletMechanism();
             enemiesMechanism();
+            gameOverMenu();
             frame_ctr++;
         }
+    }
+
+    private void gameOverMenu() {
+        if (game_over) {
+            String[] args = {"gameOver"};
+            PApplet.runSketch(args, new gameOver());
+            surface.setVisible(false);
+        }
+    }
+
+    private void statsDisplay() {
+        textSize(16);
+        fill(0, 208, 612);
+        text("HP : " + p.getHP(), 48, 48);
+        fill(000, 208, 612);
+        text("ATK : " + p.getATK(), 48+72, 48);
     }
 
     private void testingFrame() {
@@ -284,6 +303,10 @@ public class battleMain extends PApplet {
                     if (bullets_enemy.get(i).getY() >= bounding_top && bullets_enemy.get(i).getY() <= bounding_bottom) {
                         hit = true;
 
+                        p.getHit(enemies.get(i).getATK());
+                        if (p.getHP() <= 0) {
+                            game_over = true;
+                        }
                     }
                 }
 
@@ -334,9 +357,9 @@ public class battleMain extends PApplet {
                                 hit = true;
 
                                 enemies.get(j).getHit(p.getATK());
-//                                if () {
-//                                }
-                                enemies.remove(j);
+                                if (enemies.get(j).getHP() <= 0) {
+                                    enemies.remove(j);
+                                }
                             }
                         }
                     }
