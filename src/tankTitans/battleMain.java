@@ -10,6 +10,13 @@ import processing.core.PImage;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.File;
+import java.io.IOException;
 import java.util.Scanner;
 
 /**
@@ -59,6 +66,7 @@ public class battleMain extends PApplet {
     private boolean right = false;
     private boolean fire = false;
     private boolean boom = false;
+
 
 //    public static void main(String[] args) {
 //        // TODO code application logic here
@@ -117,7 +125,11 @@ public class battleMain extends PApplet {
             background(255);
             testingFrame();
             playerMechanism();
-            bulletMechanism();
+            try {
+                bulletMechanism();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             enemiesMechanism();
             frame_ctr++;
         }
@@ -301,7 +313,7 @@ public class battleMain extends PApplet {
         }
     }
 
-    private void bulletMechanism() {
+    private void bulletMechanism() throws InterruptedException{
         /* Generate bullet saat tekan spasi */
         int bullet_distance = 5;
         if (fire) {

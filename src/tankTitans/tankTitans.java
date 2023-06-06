@@ -7,6 +7,13 @@ package tankTitans;
 import processing.core.PApplet;
 import processing.core.PImage;
 import java.awt.*;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.File;
+import java.io.IOException;
 
 
 /**
@@ -25,11 +32,11 @@ public class tankTitans extends PApplet {
      *  Round: Main Menu
      */
     private PImage bg_mainMenu;
-    private GUIButton b_playGame = new GUIButton(620, 180, 300, 75, Color.CYAN);
-    private GUIButton b_highscore = new GUIButton(620, 400, 300, 75, Color.CYAN);
-    private GUIButton b_exit = new GUIButton(620, 500, 300, 75, Color.CYAN);
+    private GUIButton b_playGame = new GUIButton(490, 180, 300, 75, Color.CYAN);
+    private GUIButton b_highscore = new GUIButton(490, 400, 300, 75, Color.CYAN);
+    private GUIButton b_exit = new GUIButton(490, 500, 300, 75, Color.CYAN);
     private boolean click_playGame = false;
-
+    private boolean click_highscore = false;
     public static void main(String[] args) {
         // TODO code application logic here
         PApplet.main("tankTitans.tankTitans");
@@ -86,6 +93,11 @@ public class tankTitans extends PApplet {
             click_playGame = true;
         } else {
             click_playGame = false;
+        }
+        if ( overRect(b_highscore.getX(),b_highscore.getY(),b_highscore.getWidth(),b_highscore.getHeight()) ) {
+            click_highscore = true;
+        } else {
+            click_highscore = false;
         }
     }
 
