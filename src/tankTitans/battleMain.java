@@ -121,9 +121,12 @@ public class battleMain extends PApplet {
             playerMechanism();
             bulletMechanism();
             enemiesMechanism();
-            gameOverMenu();
             frame_ctr++;
+        } else {
+            gameOverMenu();
+            stop();
         }
+
     }
 
     private void gameOverMenu() {
@@ -305,6 +308,7 @@ public class battleMain extends PApplet {
 
                         p.getHit(enemies.get(i).getATK());
                         if (p.getHP() <= 0) {
+                            is_battle = false;
                             game_over = true;
                         }
                     }
