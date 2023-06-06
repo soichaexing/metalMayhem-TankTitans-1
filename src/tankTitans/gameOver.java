@@ -25,6 +25,7 @@ public class gameOver extends PApplet {
     private GUIButton b_highscore = new GUIButton(620, 400, 100, 75, Color.CYAN);
     private GUIButton b_exit = new GUIButton(620, 500, 100, 75, Color.CYAN);
     private boolean click_playGame = false;
+    private int ctr = 0;
 
     public static void main(String[] args) {
         // TODO code application logic here
@@ -61,6 +62,17 @@ public class gameOver extends PApplet {
 //            fill(0, 408, 612);
             textAlign(CENTER);
             text("GAME OVER", 640, 360);
+
+            ctr++;
+
+            if (ctr == 120) {
+                is_mainMenu = false;
+            }
+        } else {
+            String[] args = {"mainMenu"};
+            PApplet.runSketch(args, new tankTitans());
+            surface.setVisible(false);
+            stop();
         }
     }
 
@@ -72,9 +84,7 @@ public class gameOver extends PApplet {
 
     public void mousePressed(){
         if (click_playGame) {
-            String[] args = {"mainMenu"};
-            PApplet.runSketch(args, new tankTitans());
-            surface.setVisible(false);
+
         }
     }
 
