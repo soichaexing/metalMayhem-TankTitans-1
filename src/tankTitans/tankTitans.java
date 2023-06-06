@@ -27,7 +27,7 @@ public class tankTitans extends PApplet {
     private PImage bg_mainMenu;
     private GUIButton b_playGame = new GUIButton(620, 180, 100, 75, Color.CYAN);
     private GUIButton b_highscore = new GUIButton(620, 400, 100, 75, Color.CYAN);
-    private GUIButton b_exit = new GUIButton(620, 500, 100, 75, Color.CYAN);
+    // private GUIButton b_exit = new GUIButton(620, 500, 100, 75, Color.CYAN);
     private boolean click_playGame = false;
 
     public static void main(String[] args) {
