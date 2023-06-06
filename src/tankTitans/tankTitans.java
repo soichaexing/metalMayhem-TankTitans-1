@@ -25,7 +25,9 @@ public class tankTitans extends PApplet {
      *  Round: Main Menu
      */
     private PImage bg_mainMenu;
-    private GUIButton b_playGame = new GUIButton(360, 360, 100, 75, Color.CYAN);
+    private GUIButton b_playGame = new GUIButton(620, 180, 100, 75, Color.CYAN);
+    private GUIButton b_highscore = new GUIButton(620, 400, 100, 75, Color.CYAN);
+    private GUIButton b_exit = new GUIButton(620, 500, 100, 75, Color.CYAN);
     private boolean click_playGame = false;
 
     public static void main(String[] args) {
@@ -45,6 +47,8 @@ public class tankTitans extends PApplet {
         /* Backgrounds */
         frameRate(FPS);
         bg_mainMenu = loadImage("src/assets/background/background_1.png");
+
+        
     }
 
     /**
@@ -58,6 +62,8 @@ public class tankTitans extends PApplet {
             stroke(255, 245, 258);
             
             rect(b_playGame.getX(), b_playGame.getY(), b_playGame.getWidth(), b_playGame.getHeight());
+            rect(b_highscore.getX(), b_highscore.getY(), b_highscore.getWidth(), b_highscore.getHeight());
+            rect(b_exit.getX(), b_exit.getY(), b_exit.getWidth(), b_exit.getHeight());
         }
     }
 

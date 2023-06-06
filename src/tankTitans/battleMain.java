@@ -35,11 +35,15 @@ public class battleMain extends PApplet {
     private PImage bg_battle;
     private Player p;
     private ArrayList<Bullet> bullets;
+    private ArrayList<BulletEnemy> bullets_enemy;
     private ArrayList<Enemy> enemies;
     private PImage[] temp_bullet;
+    private PImage[] temp_bullet_enemy;
     private PImage[] temp_enemy;
+    private int fire_rate = 30;
+    private int fire_ctr = 60;
     private int max_bullet = 100;
-    private int enemy_rows = 1;
+    private int enemy_rows = 9;
     private int frame_ctr = 0;
 
     /* Status sprite player */
@@ -68,11 +72,11 @@ public class battleMain extends PApplet {
     public void settings() {
         size(WIDTH, HEIGHT);
     }
-    
+
     public void setup() {
         /* FPS */
         frameRate(FPS);
-        
+
         /* Backgrounds */
 //        bg_mainMenu = loadImage("src/assets/background/background_1.png");
 
@@ -95,6 +99,13 @@ public class battleMain extends PApplet {
         temp_enemy = new PImage[4];
         for (int i = 0; i < temp_enemy.length; i++) {
             temp_enemy[i] = loadImage("src/assets/enemy/Idle/(" + (i + 1) + ").png");
+        }
+
+        /* Bullets */
+        bullets_enemy = new ArrayList<>();
+        temp_bullet_enemy = new PImage[1];
+        for (int i = 0; i < temp_bullet_enemy.length; i++) {
+            temp_bullet_enemy[i] = loadImage("src/assets/bullet/Idle/(" + (i + 1) + ").png");
         }
     }
 
@@ -238,6 +249,55 @@ public class battleMain extends PApplet {
 //                enemies.get(i).movement();
                 enemies.get(i).drawIdle(this, frame_ctr);
             }
+
+            bulletEnemyMechanism();
+        }
+    }
+
+    private void bulletEnemyMechanism() {
+        for (int i = 0; i < enemies.size(); i++) {
+            Random rnd = new Random();
+            int fire_chance = rnd.nextInt(1, 250);
+
+            int bullet_distance = 3;
+            if (fire_chance >= 1 && fire_chance <= 1) {
+                bullets_enemy.add(new BulletEnemy(temp_bullet, enemies.get(i).getX() - bullet_distance, enemies.get(i).getY(), 64));
+                System.out.println("Dor dor");
+            }
+        }
+
+        if (bullets_enemy.size() > 0) {
+            for (int i = bullets_enemy.size() - 1; i >= 0; i--) {
+                bullets_enemy.get(i).movement();
+                bullets_enemy.get(i).drawIdle(this, frame_ctr);
+
+                /* Cek terkena musuh */
+                boolean hit = false;
+//                System.out.println("Hitbox " + i + ", " + j);
+
+                /* Penentuan hitbox */
+                int bounding_right = p.getX() + p.getRes() / 2;
+                int bounding_top = p.getY() - p.getRes() / 2;
+                int bounding_bottom = p.getY() + p.getRes() / 2;
+
+                if (bullets_enemy.get(i).getX() <= bounding_right) {
+                    if (bullets_enemy.get(i).getY() >= bounding_top && bullets_enemy.get(i).getY() <= bounding_bottom) {
+                        hit = true;
+
+                    }
+                }
+
+                /* Max distance */
+                if (bullets_enemy.get(i).getX() <= 16) {
+                    hit = true;
+                }
+
+                /* Kena dong BOOM */
+                if (hit) {
+                    bullets_enemy.remove(i);
+                    System.out.println("DUARRRRR!!!!! kenek kon thoel");
+                }
+            }
         }
     }
 
@@ -245,11 +305,13 @@ public class battleMain extends PApplet {
         /* Generate bullet saat tekan spasi */
         int bullet_distance = 5;
         if (fire) {
-            if (bullets.size() <= max_bullet) {
-                bullets.add(new Bullet(temp_bullet, p.getX() + bullet_distance, p.getY(), 64));
+            if (fire_ctr == fire_rate) {
+                if (bullets.size() <= max_bullet) {
+                    bullets.add(new Bullet(temp_bullet, p.getX() + bullet_distance, p.getY(), 64));
+                }
+                System.out.println("Test");
+                fire = false;
             }
-            System.out.println("Test");
-            fire = false;
         }
 
         if (bullets.size() > 0) {
@@ -271,6 +333,9 @@ public class battleMain extends PApplet {
                             if (bullets.get(i).getY() >= bounding_top && bullets.get(i).getY() <= bounding_bottom) {
                                 hit = true;
 
+                                enemies.get(j).getHit(p.getATK());
+//                                if () {
+//                                }
                                 enemies.remove(j);
                             }
                         }
@@ -288,6 +353,18 @@ public class battleMain extends PApplet {
                     System.out.println("DUARRRRR!!!!!, enemy sisa " + enemies.size());
                 }
             }
+
+            fire_ctr--;
+
+            if (fire_ctr <= 0) {
+                fire_ctr = fire_rate;
+            }
+        } else {
+            fire_ctr = fire_rate;
+        }
+
+        if (fire_ctr <= 0) {
+            fire_ctr = fire_rate;
         }
     }
 

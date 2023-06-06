@@ -41,4 +41,16 @@ public abstract class Entity {
     public int getRes() {
         return res;
     }
+
+    public int getHP() {
+        return HP;
+    }
+
+    public int getATK() {
+        return ATK;
+    }
+
+    public void getHit(int atk) {
+        this.HP -= atk;
+    }
 }
