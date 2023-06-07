@@ -118,13 +118,7 @@ public class battleMain extends PApplet {
      */
     public void draw() {
         if (resetup) {
-            if (level == 1) {
-            } else if (level == 2) {
-            } else if (level == 3) {
-            } else if (level == 4) {
-            } else if (level >= 5) {
-            }
-
+            subResetup();
             resetup = false;
         }
         if (is_battle) {
@@ -142,73 +136,21 @@ public class battleMain extends PApplet {
 
     }
 
-    private void roundCheck() {
+    private void subResetup() {
+        if (level == 1) {
+        } else if (level == 2) {
+        } else if (level == 3) {
+        } else if (level == 4) {
+        } else if (level >= 5) {
+        }
+
         if (enemies.size() == 0) {
-            level++;
-            resetup = true;
+            spawnEnemies();
         }
     }
 
-    private void gameOverMenu() {
-        if (game_over) {
-            String[] args = {"gameOver"};
-            PApplet.runSketch(args, new gameOver());
-            surface.setVisible(false);
-        }
-    }
-
-    private void statsDisplay() {
-        textSize(16);
-        fill(0, 208, 612);
-        text("HP : " + p.getHP(), 48, 48);
-        fill(000, 208, 612);
-        text("ATK : " + p.getATK(), 48 + 72, 48);
-        fill(000, 208, 612);
-        text("Level : " + level, 48 + 72 + 192, 48);
-    }
-
-    private void testingFrame() {
-        int center_y = 720 / 2;
-        int center_x = 1280 / 2;
-        int movement = 48;
-        line(0, center_y - (0 * movement), 1280, center_y - (0 * movement));
-        line(0, center_y - (1 * movement), 1280, center_y - (1 * movement));
-        line(0, center_y - (2 * movement), 1280, center_y - (2 * movement));
-        line(0, center_y - (3 * movement), 1280, center_y - (3 * movement));
-        line(0, center_y - (4 * movement), 1280, center_y - (4 * movement));
-        line(0, center_y + (1 * movement), 1280, center_y + (1 * movement));
-        line(0, center_y + (2 * movement), 1280, center_y + (2 * movement));
-        line(0, center_y + (3 * movement), 1280, center_y + (3 * movement));
-        line(0, center_y + (4 * movement), 1280, center_y + (4 * movement));
-
-        line(192, 0, 192, 720);
-        line(1280 - 192, 0, 1280 - 192, 720);
-
-        fill(0, 0, 0);
-        stroke(0, 0, 0);
-    }
-
-    private void playerMechanism() {
-        if (p.getY() < 360 - (4 * 48) - 32) {
-            up = false;
-        }
-        if (p.getY() > 360 + (4 * 48) + 32) {
-            down = false;
-        }
-        p.movement(up, down, left, right);
-//        if (running) {
-//            if (movement_ctr < limit_movement) {
-//                System.out.println("mvm: " + movement_ctr);
-//                movement_ctr++;
-//            }
-//        }
-        p.drawIdle(this, frame_ctr);
-    }
-
-    private void enemiesMechanism() {
+    private void spawnEnemies() {
         if (enemies.size() == 0) {
-            level++;
-
             int gap = 32 / 2;
             int[] y_spawn = new int[enemy_rows];
 
@@ -301,7 +243,74 @@ public class battleMain extends PApplet {
                     enemy_rows = 9;
                 }
             }
-        } else {
+        }
+    }
+
+    private void roundCheck() {
+        if (enemies.size() == 0) {
+            level++;
+            resetup = true;
+        }
+    }
+
+    private void gameOverMenu() {
+        if (game_over) {
+            String[] args = {"gameOver"};
+            PApplet.runSketch(args, new gameOver());
+            surface.setVisible(false);
+        }
+    }
+
+    private void statsDisplay() {
+        textSize(16);
+        fill(0, 208, 612);
+        text("HP : " + p.getHP(), 48, 48);
+        fill(000, 208, 612);
+        text("ATK : " + p.getATK(), 48 + 72, 48);
+        fill(000, 208, 612);
+        text("Level : " + level, 48 + 72 + 192, 48);
+    }
+
+    private void testingFrame() {
+        int center_y = 720 / 2;
+        int center_x = 1280 / 2;
+        int movement = 48;
+        line(0, center_y - (0 * movement), 1280, center_y - (0 * movement));
+        line(0, center_y - (1 * movement), 1280, center_y - (1 * movement));
+        line(0, center_y - (2 * movement), 1280, center_y - (2 * movement));
+        line(0, center_y - (3 * movement), 1280, center_y - (3 * movement));
+        line(0, center_y - (4 * movement), 1280, center_y - (4 * movement));
+        line(0, center_y + (1 * movement), 1280, center_y + (1 * movement));
+        line(0, center_y + (2 * movement), 1280, center_y + (2 * movement));
+        line(0, center_y + (3 * movement), 1280, center_y + (3 * movement));
+        line(0, center_y + (4 * movement), 1280, center_y + (4 * movement));
+
+        line(192, 0, 192, 720);
+        line(1280 - 192, 0, 1280 - 192, 720);
+
+        fill(0, 0, 0);
+        stroke(0, 0, 0);
+    }
+
+    private void playerMechanism() {
+        if (p.getY() < 360 - (4 * 48) - 32) {
+            up = false;
+        }
+        if (p.getY() > 360 + (4 * 48) + 32) {
+            down = false;
+        }
+        p.movement(up, down, left, right);
+//        if (running) {
+//            if (movement_ctr < limit_movement) {
+//                System.out.println("mvm: " + movement_ctr);
+//                movement_ctr++;
+//            }
+//        }
+        p.drawIdle(this, frame_ctr);
+    }
+
+    private void enemiesMechanism() {
+        if (enemies.size() >= 0) {
             for (int i = enemies.size() - 1; i >= 0; i--) {
 //                enemies.get(i).movement();
                 enemies.get(i).drawIdle(this, frame_ctr);
