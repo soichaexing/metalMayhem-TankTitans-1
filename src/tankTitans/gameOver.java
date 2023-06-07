@@ -27,9 +27,13 @@ public class gameOver extends PApplet {
     private boolean click_playGame = false;
     private int ctr = 0;
 
-    public static void main(String[] args) {
-        // TODO code application logic here
-        PApplet.main("tankTitans.tankTitans");
+//    public static void main(String[] args) {
+//        // TODO code application logic here
+//        PApplet.main("tankTitans.tankTitans");
+//    }
+
+    public gameOver(String[] args){
+        this.args = args;
     }
 
     /**
@@ -44,8 +48,6 @@ public class gameOver extends PApplet {
         /* Backgrounds */
         frameRate(FPS);
         bg_mainMenu = loadImage("src/assets/background/background_1.png");
-
-
     }
 
     /**
@@ -58,11 +60,7 @@ public class gameOver extends PApplet {
             fill(255, 245, 248);
             stroke(255, 245, 258);
 
-            textSize(128);
-//            fill(0, 408, 612);
-            textAlign(CENTER);
-            text("GAME OVER", 640, 360);
-
+            subMenu();
             ctr++;
 
             if (ctr == 120) {
@@ -73,6 +71,20 @@ public class gameOver extends PApplet {
             PApplet.runSketch(args, new tankTitans());
             surface.setVisible(false);
             stop();
+        }
+    }
+
+    private void subMenu() {
+        if (args[0].equals("gameOver")) {
+            textSize(128);
+//            fill(0, 408, 612);
+            textAlign(CENTER);
+            text("GAME OVER", 640, 360);
+        }
+        if (args[0].equals("winnerChickenDinner")) {
+            textSize(128);
+            textAlign(CENTER);
+            text("YOU WIN", 640, 360);
         }
     }
 

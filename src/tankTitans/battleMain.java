@@ -58,11 +58,15 @@ public class battleMain extends PApplet {
     private boolean right = false;
     private boolean fire = false;
     private boolean boom = false;
-    private boolean game_over = false;
 
     /* Rounds */
     private int level = 1;
     private boolean resetup = true;
+    private boolean game_over = false;
+    private boolean has_won = false;
+
+    /* Cheats */
+    private boolean killenemies = false;
 
 //    public static void main(String[] args) {
 //        // TODO code application logic here
@@ -131,7 +135,7 @@ public class battleMain extends PApplet {
             frame_ctr++;
         } else {
             gameOverMenu();
-            stop();
+//            stop();
         }
 
     }
@@ -247,6 +251,16 @@ public class battleMain extends PApplet {
     }
 
     private void roundCheck() {
+        if (enemies.size() == 0 && level >= 5) {
+            is_battle = false;
+            game_over = true;
+            has_won = true;
+        }
+        if (level > 5) {
+            is_battle = false;
+            game_over = true;
+            has_won = true;
+        }
         if (enemies.size() == 0) {
             level++;
             resetup = true;
@@ -255,9 +269,14 @@ public class battleMain extends PApplet {
 
     private void gameOverMenu() {
         if (game_over) {
-            String[] args = {"gameOver"};
-            PApplet.runSketch(args, new gameOver());
+            String[] args = new String[1];
+            args[0] = "gameOver";
+            if (has_won) {
+                args[0] ="winnerChickenDinner";
+            }
+            PApplet.runSketch(args, new gameOver(args));
             surface.setVisible(false);
+            stop();
         }
     }
 
@@ -426,11 +445,6 @@ public class battleMain extends PApplet {
                     }
                 }
 
-                /* Cek musuh habis */
-                if (enemies.size() == 0) {
-                    roundCheck();
-                }
-
                 /* Max distance */
                 if (bullets.get(i).getX() >= 1200) {
                     hit = true;
@@ -450,6 +464,15 @@ public class battleMain extends PApplet {
             }
         } else {
             fire_ctr = fire_rate;
+        }
+
+        /* Cek musuh habis */
+        if (killenemies) {
+            enemies.clear();
+            killenemies = false;
+        }
+        if (enemies.size() == 0) {
+            roundCheck();
         }
 
         if (fire_ctr <= 0) {
@@ -476,6 +499,9 @@ public class battleMain extends PApplet {
         }
         if (key == 'x') {
             System.out.println(p.getX() + ", " + p.getY());
+        }
+        if (key == 'q') {
+            killenemies = true;
         }
     }
 
