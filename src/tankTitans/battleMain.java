@@ -7,10 +7,8 @@ package tankTitans;
 import processing.core.PApplet;
 import processing.core.PImage;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Scanner;
 
 /**
  * @author RAFAEL MATTHEW
@@ -23,6 +21,10 @@ public class battleMain extends PApplet {
 
     /* Rounds */
     private boolean is_battle = true;
+    private boolean round_end = false;
+    private boolean is_paused = false;
+    private int pause_ctr = 0;
+    private int pause_timer = 75;
 
     /**
      * Round: Battle
@@ -39,8 +41,9 @@ public class battleMain extends PApplet {
     private PImage[] temp_bullet;
     private PImage[] temp_bullet_enemy;
     private PImage[] temp_enemy;
-    private int fire_rate = 30;
-    private int fire_ctr = 60;
+    private boolean is_firing = false;
+    private int fire_rate;
+    private int fire_ctr;
     private int max_bullet = 100;
     private int enemy_rows = 9;
     private int frame_ctr = 0;
@@ -126,12 +129,14 @@ public class battleMain extends PApplet {
             resetup = false;
         }
         if (is_battle) {
+            gameDelay();
             background(255);
             statsDisplay();
             testingFrame();
             playerMechanism();
             bulletMechanism();
             enemiesMechanism();
+            roundEndMechanism();
             frame_ctr++;
         } else {
             gameOverMenu();
@@ -140,12 +145,74 @@ public class battleMain extends PApplet {
 
     }
 
+    private void roundEndMechanism() {
+        /* Cek musuh habis */
+        if (pause_ctr >= 0) {
+            if (killenemies) {
+                enemies.clear();
+                round_end = true;
+                killenemies = false;
+            } else if (enemies.size() == 0) {
+                round_end = true;
+            }
+        }
+
+        if (round_end) {
+            is_paused = true;
+        } else {
+            roundCheck();
+        }
+
+    }
+
+    private void roundCheck() {
+        if (!is_paused) {
+            if (enemies.size() == 0 && level >= 5) {
+                is_battle = false;
+                game_over = true;
+                has_won = true;
+            }
+            if (level > 5) {
+                is_battle = false;
+                game_over = true;
+                has_won = true;
+            }
+            if (enemies.size() == 0) {
+                level++;
+                pause_ctr = 0;
+                resetup = true;
+            }
+        }
+    }
+
+    public void gameDelay(){
+        if (is_paused) {
+            pause_ctr++;
+
+            if (pause_ctr >= pause_timer) {
+                pause_ctr = -1;
+                round_end = false;
+                is_paused = false;
+            }
+        }
+    }
+
     private void subResetup() {
         if (level == 1) {
+            fire_rate = 45;
+            fire_ctr = 45;
         } else if (level == 2) {
+            fire_rate = 45;
+            fire_ctr = 45;
         } else if (level == 3) {
+            fire_rate = 30;
+            fire_ctr = 0;
         } else if (level == 4) {
+            fire_rate = 25;
+            fire_ctr = 25;
         } else if (level >= 5) {
+            fire_rate = 15;
+            fire_ctr = 15;
         }
 
         if (enemies.size() == 0) {
@@ -250,23 +317,6 @@ public class battleMain extends PApplet {
         }
     }
 
-    private void roundCheck() {
-        if (enemies.size() == 0 && level >= 5) {
-            is_battle = false;
-            game_over = true;
-            has_won = true;
-        }
-        if (level > 5) {
-            is_battle = false;
-            game_over = true;
-            has_won = true;
-        }
-        if (enemies.size() == 0) {
-            level++;
-            resetup = true;
-        }
-    }
-
     private void gameOverMenu() {
         if (game_over) {
             String[] args = new String[1];
@@ -288,6 +338,10 @@ public class battleMain extends PApplet {
         text("ATK : " + p.getATK(), 48 + 72, 48);
         fill(000, 208, 612);
         text("Level : " + level, 48 + 72 + 192, 48);
+        fill(000, 208, 612);
+        text("fire_ctr : " + fire_ctr, 48 + 72 + 192 + 72, 48);
+        fill(000, 208, 612);
+        text("pause_ctr : " + pause_ctr, 48 + 72 + 192 + 72 + 128, 48);
     }
 
     private void testingFrame() {
@@ -409,6 +463,7 @@ public class battleMain extends PApplet {
         if (fire) {
             if (fire_ctr == fire_rate) {
                 if (bullets.size() <= max_bullet) {
+                    is_firing = true;
                     bullets.add(new Bullet(temp_bullet, p.getX() + bullet_distance, p.getY(), 64));
                 }
                 System.out.println("Test");
@@ -456,26 +511,14 @@ public class battleMain extends PApplet {
                     System.out.println("DUARRRRR!!!!!, enemy sisa " + enemies.size());
                 }
             }
+        }
 
+        /* Fire speed */
+        if (is_firing) {
             fire_ctr--;
-
-            if (fire_ctr <= 0) {
-                fire_ctr = fire_rate;
-            }
-        } else {
-            fire_ctr = fire_rate;
         }
-
-        /* Cek musuh habis */
-        if (killenemies) {
-            enemies.clear();
-            killenemies = false;
-        }
-        if (enemies.size() == 0) {
-            roundCheck();
-        }
-
         if (fire_ctr <= 0) {
+            is_firing = false;
             fire_ctr = fire_rate;
         }
     }
@@ -494,14 +537,16 @@ public class battleMain extends PApplet {
 //        if(key == 'a') {left = true; running = true; idle = false;}
 //        if(key == 'd') {right = true; running = true; idle = false;}
 
-        if (key == ' ') {
-            fire = true;
-        }
-        if (key == 'x') {
-            System.out.println(p.getX() + ", " + p.getY());
-        }
-        if (key == 'q') {
-            killenemies = true;
+        if (!is_paused) {
+            if (key == ' ') {
+                fire = true;
+            }
+            if (key == 'x') {
+                System.out.println(p.getX() + ", " + p.getY());
+            }
+            if (key == 'q') {
+                killenemies = true;
+            }
         }
     }
 
