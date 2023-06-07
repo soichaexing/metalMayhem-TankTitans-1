@@ -6,8 +6,8 @@ import processing.core.PImage;
 public class BulletEnemy extends Entity implements SpriteAnimation {
     protected int bullet_speed = 7;
 
-    public BulletEnemy(PImage[] idle, int x, int y, int res) {
-        super(0, 0, 0, x, y);
+    public BulletEnemy(PImage[] idle, int x, int y, int res, int ATK) {
+        super(0, ATK, 0, x, y);
         super.idle = idle;
         super.timing = 3;
         super.frame = 0;

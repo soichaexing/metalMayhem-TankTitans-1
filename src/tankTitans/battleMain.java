@@ -51,6 +51,8 @@ public class battleMain extends PApplet {
     /* Status sprite player */
     private boolean idle = true;
     private boolean running = false;
+    private int player_bullet_res = 64;
+    private int enemy_bullet_res = 32;
 
     /* Gerak Sprite */
     private int limit_movement = 1;
@@ -411,7 +413,7 @@ public class battleMain extends PApplet {
 
             int bullet_distance = 3;
             if (fire_chance >= 1 && fire_chance <= 1) {
-                bullets_enemy.add(new BulletEnemy(temp_bullet, enemies.get(i).getX() - bullet_distance, enemies.get(i).getY(), 64));
+                bullets_enemy.add(new BulletEnemy(temp_bullet, enemies.get(i).getX() - bullet_distance, enemies.get(i).getY(), enemy_bullet_res, enemies.get(i).getATK()));
                 System.out.println("Dor dor");
             }
         }
@@ -435,7 +437,7 @@ public class battleMain extends PApplet {
                     if (bullets_enemy.get(i).getY() >= bounding_top && bullets_enemy.get(i).getY() <= bounding_bottom) {
                         hit = true;
 
-                        p.getHit(enemies.get(i).getATK());
+                        p.getHit(bullets_enemy.get(i).getATK());
                         if (p.getHP() <= 0) {
                             is_battle = false;
                             game_over = true;
@@ -464,7 +466,7 @@ public class battleMain extends PApplet {
             if (fire_ctr == fire_rate) {
                 if (bullets.size() <= max_bullet) {
                     is_firing = true;
-                    bullets.add(new Bullet(temp_bullet, p.getX() + bullet_distance, p.getY(), 64));
+                    bullets.add(new Bullet(temp_bullet, p.getX() + bullet_distance, p.getY(), player_bullet_res, p.getATK()));
                 }
                 System.out.println("Test");
                 fire = false;
@@ -491,7 +493,7 @@ public class battleMain extends PApplet {
                             if (bullets.get(i).getY() >= bounding_top && bullets.get(i).getY() <= bounding_bottom) {
                                 hit = true;
 
-                                enemies.get(j).getHit(p.getATK());
+                                enemies.get(j).getHit(bullets.get(i).getATK());
                                 if (enemies.get(j).getHP() <= 0) {
                                     enemies.remove(j);
                                 }
