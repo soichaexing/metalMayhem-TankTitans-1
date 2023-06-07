@@ -353,11 +353,12 @@ public class battleMain extends PApplet {
 //                System.out.println("Hitbox " + i + ", " + j);
 
                 /* Penentuan hitbox */
+                int bounding_left = p.getX() - p.getRes() / 2;
                 int bounding_right = p.getX() + p.getRes() / 2;
                 int bounding_top = p.getY() - p.getRes() / 2;
                 int bounding_bottom = p.getY() + p.getRes() / 2;
 
-                if (bullets_enemy.get(i).getX() <= bounding_right) {
+                if (bullets_enemy.get(i).getX() >= bounding_left && bullets_enemy.get(i).getX() <= bounding_right) {
                     if (bullets_enemy.get(i).getY() >= bounding_top && bullets_enemy.get(i).getY() <= bounding_bottom) {
                         hit = true;
 
@@ -408,10 +409,11 @@ public class battleMain extends PApplet {
                         System.out.println("Hitbox " + i + ", " + j);
                         /* Penentuan hitbox */
                         int bounding_left = enemies.get(j).getX() - enemies.get(j).getRes() / 2;
+                        int bounding_right = enemies.get(j).getX() + enemies.get(j).getRes() / 2;
                         int bounding_top = enemies.get(j).getY() - enemies.get(j).getRes() / 2;
                         int bounding_bottom = enemies.get(j).getY() + enemies.get(j).getRes() / 2;
 
-                        if (bullets.get(i).getX() >= bounding_left) {
+                        if (bullets.get(i).getX() >= bounding_left && bullets.get(i).getX() <= bounding_right) {
                             if (bullets.get(i).getY() >= bounding_top && bullets.get(i).getY() <= bounding_bottom) {
                                 hit = true;
 
