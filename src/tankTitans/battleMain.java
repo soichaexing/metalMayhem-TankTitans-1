@@ -62,7 +62,7 @@ public class battleMain extends PApplet {
 
     /* Rounds */
     private int level = 1;
-    private boolean resetup = false;
+    private boolean resetup = true;
 
 //    public static void main(String[] args) {
 //        // TODO code application logic here
@@ -224,13 +224,13 @@ public class battleMain extends PApplet {
                 if (level == 1) {
                     enemies.add(new Enemy(temp_enemy, 1280 - 192, y_spawn[i], 32, 3, 1, 0));
                 } else if (level == 2) {
-                    enemies.add(new Enemy(temp_enemy, 1280 - 192, y_spawn[i], 32, 3, 2, 0));
+                    enemies.add(new Enemy(temp_enemy, 1280 - 192 - 32, y_spawn[i], 32, 3, 2, 0));
                 } else if (level == 3) {
-                    enemies.add(new Enemy(temp_enemy, 1280 - 192, y_spawn[i], 32, 6, 2, 0));
+                    enemies.add(new Enemy(temp_enemy, 1280 - 192 - 32, y_spawn[i], 32, 6, 2, 0));
                 } else if (level == 4) {
-                    enemies.add(new Enemy(temp_enemy, 1280 - 192, y_spawn[i], 32, 6, 2, 0));
+                    enemies.add(new Enemy(temp_enemy, 1280 - 192 - 48, y_spawn[i], 32, 6, 2, 0));
                 } else if (level >= 5) {
-                    enemies.add(new Enemy(temp_enemy, 1280 - 192, y_spawn[i], 32, 10, 2, 0));
+                    enemies.add(new Enemy(temp_enemy, 1280 - 192 - 48, y_spawn[i], 32, 10, 2, 0));
                 }
             }
 
@@ -422,6 +422,11 @@ public class battleMain extends PApplet {
                             }
                         }
                     }
+                }
+
+                /* Cek musuh habis */
+                if (enemies.size() == 0) {
+                    roundCheck();
                 }
 
                 /* Max distance */
