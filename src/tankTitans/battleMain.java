@@ -93,7 +93,7 @@ public class battleMain extends PApplet {
 
         /* Bullets */
         bullets = new ArrayList<>();
-        temp_bullet = new PImage[1];
+        temp_bullet = new PImage[3];
         for (int i = 0; i < temp_bullet.length; i++) {
             temp_bullet[i] = loadImage("src/assets/bullet/Idle/(" + (i + 1) + ").png");
         }
@@ -105,9 +105,9 @@ public class battleMain extends PApplet {
             temp_enemy[i] = loadImage("src/assets/enemy/Idle/(" + (i + 1) + ").png");
         }
 
-        /* Bullets */
+        /* Enemy bullets */
         bullets_enemy = new ArrayList<>();
-        temp_bullet_enemy = new PImage[1];
+        temp_bullet_enemy = new PImage[3];
         for (int i = 0; i < temp_bullet_enemy.length; i++) {
             temp_bullet_enemy[i] = loadImage("src/assets/bullet/Idle/(" + (i + 1) + ").png");
         }
