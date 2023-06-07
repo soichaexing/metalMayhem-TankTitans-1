@@ -8,7 +8,7 @@ public class Player extends Entity implements SpriteAnimation {
     protected int movement_speed;
 
     public Player(PImage[] idle, int x, int y, int res) {
-        super(10, 3, 0, x, y);
+        super(20, 3, 0, x, y);
         super.idle = idle;
         super.timing = 3;
         super.frame = 0;

@@ -13,7 +13,6 @@ import java.util.Random;
 import java.util.Scanner;
 
 /**
- *
  * @author RAFAEL MATTHEW
  */
 public class battleMain extends PApplet {
@@ -60,6 +59,10 @@ public class battleMain extends PApplet {
     private boolean fire = false;
     private boolean boom = false;
     private boolean game_over = false;
+
+    /* Rounds */
+    private int level = 1;
+    private boolean resetup = false;
 
 //    public static void main(String[] args) {
 //        // TODO code application logic here
@@ -114,6 +117,16 @@ public class battleMain extends PApplet {
      * Main program
      */
     public void draw() {
+        if (resetup) {
+            if (level == 1) {
+            } else if (level == 2) {
+            } else if (level == 3) {
+            } else if (level == 4) {
+            } else if (level >= 5) {
+            }
+
+            resetup = false;
+        }
         if (is_battle) {
             background(255);
             statsDisplay();
@@ -129,6 +142,13 @@ public class battleMain extends PApplet {
 
     }
 
+    private void roundCheck() {
+        if (enemies.size() == 0) {
+            level++;
+            resetup = true;
+        }
+    }
+
     private void gameOverMenu() {
         if (game_over) {
             String[] args = {"gameOver"};
@@ -142,7 +162,9 @@ public class battleMain extends PApplet {
         fill(0, 208, 612);
         text("HP : " + p.getHP(), 48, 48);
         fill(000, 208, 612);
-        text("ATK : " + p.getATK(), 48+72, 48);
+        text("ATK : " + p.getATK(), 48 + 72, 48);
+        fill(000, 208, 612);
+        text("Level : " + level, 48 + 72 + 192, 48);
     }
 
     private void testingFrame() {
@@ -185,6 +207,8 @@ public class battleMain extends PApplet {
 
     private void enemiesMechanism() {
         if (enemies.size() == 0) {
+            level++;
+
             int gap = 32 / 2;
             int[] y_spawn = new int[enemy_rows];
 
@@ -254,7 +278,18 @@ public class battleMain extends PApplet {
 
             for (int i = 0; i < enemy_rows; i++) {
                 System.out.println("Enemy " + i);
-                enemies.add(new Enemy(temp_enemy, 1280 - 192, y_spawn[i], 32));
+
+                if (level == 1) {
+                    enemies.add(new Enemy(temp_enemy, 1280 - 192, y_spawn[i], 32, 3, 1, 0));
+                } else if (level == 2) {
+                    enemies.add(new Enemy(temp_enemy, 1280 - 192, y_spawn[i], 32, 3, 2, 0));
+                } else if (level == 3) {
+                    enemies.add(new Enemy(temp_enemy, 1280 - 192, y_spawn[i], 32, 6, 2, 0));
+                } else if (level == 4) {
+                    enemies.add(new Enemy(temp_enemy, 1280 - 192, y_spawn[i], 32, 6, 2, 0));
+                } else if (level >= 5) {
+                    enemies.add(new Enemy(temp_enemy, 1280 - 192, y_spawn[i], 32, 10, 2, 0));
+                }
             }
 
             if (enemy_rows < 5) {
@@ -279,7 +314,18 @@ public class battleMain extends PApplet {
     private void bulletEnemyMechanism() {
         for (int i = 0; i < enemies.size(); i++) {
             Random rnd = new Random();
-            int fire_chance = rnd.nextInt(1, 250);
+            int fire_chance = 0;
+            if (level == 1) {
+                fire_chance = rnd.nextInt(1, 300);
+            } else if (level == 2) {
+                fire_chance = rnd.nextInt(1, 260);
+            } else if (level == 3) {
+                fire_chance = rnd.nextInt(1, 230);
+            } else if (level == 4) {
+                fire_chance = rnd.nextInt(1, 200);
+            } else if (level >= 5) {
+                fire_chance = rnd.nextInt(1, 150);
+            }
 
             int bullet_distance = 3;
             if (fire_chance >= 1 && fire_chance <= 1) {
