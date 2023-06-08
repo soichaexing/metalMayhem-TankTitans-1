@@ -17,12 +17,11 @@ public class tankTitans extends PApplet {
     private static final int HEIGHT = 720;
     private static final int FPS = 60;
 
-    /* Rounds */
-    private boolean is_mainMenu = true;
-
     /**
      *  Round: Main Menu
      */
+    private boolean is_mainMenu = true;
+
     private PImage bg_mainMenu;
     private GUIButton b_playGame = new GUIButton(620, 180, 100, 75, Color.CYAN);
     private GUIButton b_highscore = new GUIButton(620, 400, 100, 75, Color.CYAN);
@@ -46,8 +45,6 @@ public class tankTitans extends PApplet {
         /* Backgrounds */
         frameRate(FPS);
         bg_mainMenu = loadImage("src/assets/background/background_1.png");
-
-        
     }
 
     /**

@@ -19,40 +19,55 @@ public class battleMain extends PApplet {
     private static final int HEIGHT = 720;
     private static final int FPS = 60;
 
-    /* Rounds */
+    /**
+     * Round: Battle
+     */
     private boolean is_battle = true;
     private boolean round_end = false;
     private boolean is_paused = false;
     private int pause_ctr = 0;
     private int pause_timer = 75;
 
-    /**
-     * Round: Battle
-     */
-
-    /* Inialisasi untuk battle */
-    /* List Unit/Entity seperti tank, bullet, dll. */
-    /* Note : ganti jadi local variable supaya tidak boros memori */
+    /* Rounds */
     private PImage bg_battle;
+    private int frame_ctr = 0;
+    private int level = 1;
+    private boolean resetup = true;
+    private boolean game_over = false;
+    private boolean has_won = false;
+
+//     Inialisasi untuk battle
+//     List Unit/Entity seperti tank, bullet, dll.
+//     Note : ganti jadi local variable supaya tidak boros memori
+
+    /* Player */
     private Player p;
     private ArrayList<Bullet> bullets;
-    private ArrayList<BulletEnemy> bullets_enemy;
-    private ArrayList<Enemy> enemies;
+    private int player_res = 64;
     private PImage[] temp_bullet;
-    private PImage[] temp_bullet_enemy;
-    private PImage[] temp_enemy;
     private boolean is_firing = false;
     private int fire_rate;
     private int fire_ctr;
     private int max_bullet = 100;
+    private int player_bullet_res = 64;
+
+    /* Enemy */
+    private ArrayList<Enemy> enemies;
+    private PImage[] temp_enemy;
     private int enemy_rows = 9;
-    private int frame_ctr = 0;
+    private int enemy_res = 32;
+    private ArrayList<BulletEnemy> bullets_enemy;
+    private PImage[] temp_bullet_enemy;
+    private int enemy_bullet_res = 32;
+
+    /* Explosion */
+    private ArrayList<Explosion> explosions;
+    private PImage[] temp_explosion;
+    private int explosion_res = 48;
 
     /* Status sprite player */
     private boolean idle = true;
     private boolean running = false;
-    private int player_bullet_res = 64;
-    private int enemy_bullet_res = 32;
 
     /* Gerak Sprite */
     private int limit_movement = 1;
@@ -63,12 +78,6 @@ public class battleMain extends PApplet {
     private boolean right = false;
     private boolean fire = false;
     private boolean boom = false;
-
-    /* Rounds */
-    private int level = 1;
-    private boolean resetup = true;
-    private boolean game_over = false;
-    private boolean has_won = false;
 
     /* Cheats */
     private boolean killenemies = false;
@@ -98,7 +107,7 @@ public class battleMain extends PApplet {
         for (int i = 0; i < temp_player.length; i++) {
             temp_player[i] = loadImage("src/assets/player/Idle/(" + (i + 1) + ").png");
         }
-        p = new Player(temp_player, 192, 360, 64);
+        p = new Player(temp_player, 192, 360, player_res);
 
         /* Bullets */
         bullets = new ArrayList<>();
@@ -120,6 +129,13 @@ public class battleMain extends PApplet {
         for (int i = 0; i < temp_bullet_enemy.length; i++) {
             temp_bullet_enemy[i] = loadImage("src/assets/bullet/Idle/(" + (i + 1) + ").png");
         }
+
+        /* Explosion */
+        explosions = new ArrayList<>();
+        temp_explosion = new PImage[8];
+        for (int i = 0; i < temp_explosion.length; i++) {
+            temp_explosion[i] = loadImage("src/assets/explosion/(" + (i + 1) + ").png");
+        }
     }
 
     /**
@@ -139,12 +155,25 @@ public class battleMain extends PApplet {
             bulletMechanism();
             enemiesMechanism();
             roundEndMechanism();
+            explosionMechanism();
             frame_ctr++;
         } else {
             gameOverMenu();
 //            stop();
         }
 
+    }
+
+    private void explosionMechanism() {
+        for (int i = explosions.size() - 1; i >= 0; i--) {
+            if (explosions.get(i).isFinished()) {
+                explosions.remove(i);
+                break;
+            } else {
+                System.out.println("MELEDAK!!");
+                explosions.get(i).drawIdle(this, frame_ctr);
+            }
+        }
     }
 
     private void roundEndMechanism() {
@@ -187,7 +216,7 @@ public class battleMain extends PApplet {
         }
     }
 
-    public void gameDelay(){
+    public void gameDelay() {
         if (is_paused) {
             pause_ctr++;
 
@@ -295,15 +324,15 @@ public class battleMain extends PApplet {
                 System.out.println("Enemy " + i);
 
                 if (level == 1) {
-                    enemies.add(new Enemy(temp_enemy, 1280 - 192, y_spawn[i], 32, 3, 1, 0));
+                    enemies.add(new Enemy(temp_enemy, 1280 - 192, y_spawn[i], enemy_res, 3, 1, 0));
                 } else if (level == 2) {
-                    enemies.add(new Enemy(temp_enemy, 1280 - 192 - 32, y_spawn[i], 32, 3, 2, 0));
+                    enemies.add(new Enemy(temp_enemy, 1280 - 192 - 32, y_spawn[i], enemy_res, 3, 2, 0));
                 } else if (level == 3) {
-                    enemies.add(new Enemy(temp_enemy, 1280 - 192 - 32, y_spawn[i], 32, 6, 2, 0));
+                    enemies.add(new Enemy(temp_enemy, 1280 - 192 - 32, y_spawn[i], enemy_res, 6, 2, 0));
                 } else if (level == 4) {
-                    enemies.add(new Enemy(temp_enemy, 1280 - 192 - 48, y_spawn[i], 32, 6, 2, 0));
+                    enemies.add(new Enemy(temp_enemy, 1280 - 192 - 48, y_spawn[i], enemy_res, 6, 2, 0));
                 } else if (level >= 5) {
-                    enemies.add(new Enemy(temp_enemy, 1280 - 192 - 48, y_spawn[i], 32, 10, 2, 0));
+                    enemies.add(new Enemy(temp_enemy, 1280 - 192 - 48, y_spawn[i], enemy_res, 10, 2, 0));
                 }
             }
 
@@ -324,7 +353,7 @@ public class battleMain extends PApplet {
             String[] args = new String[1];
             args[0] = "gameOver";
             if (has_won) {
-                args[0] ="winnerChickenDinner";
+                args[0] = "winnerChickenDinner";
             }
             PApplet.runSketch(args, new gameOver(args));
             surface.setVisible(false);
@@ -509,6 +538,7 @@ public class battleMain extends PApplet {
 
                 /* Kena dong BOOM */
                 if (hit) {
+                    explosions.add(new Explosion(temp_explosion, bullets.get(i).getX(), bullets.get(i).getY(), explosion_res));
                     bullets.remove(i);
                     System.out.println("DUARRRRR!!!!!, enemy sisa " + enemies.size());
                 }
