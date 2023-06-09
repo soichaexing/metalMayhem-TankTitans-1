@@ -8,6 +8,7 @@ import processing.core.PApplet;
 import processing.core.PImage;
 
 import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.Random;
 
 /**
@@ -27,6 +28,8 @@ public class battleMain extends PApplet {
     private boolean is_paused = false;
     private int pause_ctr = 0;
     private int pause_timer = 75;
+    private double timer = 0;
+    private double score = 0;
 
     /* Rounds */
     private PImage bg_battle;
@@ -64,6 +67,12 @@ public class battleMain extends PApplet {
     private ArrayList<Explosion> explosions;
     private PImage[] temp_explosion;
     private int explosion_res = 48;
+
+    /* Effects */
+    private ArrayList<Effects> effects;
+    private PImage[] temp_effect_blue;
+    private PImage[] temp_effect_red;
+    private int effect_res = 48;
 
     /* Status sprite player */
     private boolean idle = true;
@@ -136,6 +145,15 @@ public class battleMain extends PApplet {
         for (int i = 0; i < temp_explosion.length; i++) {
             temp_explosion[i] = loadImage("src/assets/explosion/(" + (i + 1) + ").png");
         }
+
+        /* Effects */
+        effects = new ArrayList<>();
+        temp_effect_blue = new PImage[3];
+        temp_effect_red = new PImage[3];
+        for (int i = 0; i < temp_effect_blue.length; i++) {
+            temp_effect_blue[i] = loadImage("src/assets/effects/blue/(" + (i + 1) + ").png");
+            temp_effect_red[i] = loadImage("src/assets/effects/red/(" + (i + 1) + ").png");
+        }
     }
 
     /**
@@ -148,20 +166,39 @@ public class battleMain extends PApplet {
         }
         if (is_battle) {
             gameDelay();
-            background(255);
-            statsDisplay();
+            background(20);
             testingFrame();
             playerMechanism();
             bulletMechanism();
             enemiesMechanism();
             roundEndMechanism();
             explosionMechanism();
-            frame_ctr++;
+            effectMechanism();
+            timerMechanism();
+            statsDisplay();
         } else {
             gameOverMenu();
 //            stop();
         }
+    }
 
+    private void effectMechanism() {
+        for (int i = effects.size() - 1; i >= 0; i--) {
+            if (effects.get(i).isFinished()) {
+                effects.remove(i);
+                break;
+            } else {
+                effects.get(i).drawIdle(this, frame_ctr);
+            }
+        }
+    }
+
+    private void timerMechanism() {
+        if (!is_paused) {
+            timer += 1.0;
+            score = timer / 60.0;
+        }
+        frame_ctr++;
     }
 
     private void explosionMechanism() {
@@ -373,6 +410,11 @@ public class battleMain extends PApplet {
         text("fire_ctr : " + fire_ctr, 48 + 72 + 192 + 72, 48);
         fill(000, 208, 612);
         text("pause_ctr : " + pause_ctr, 48 + 72 + 192 + 72 + 128, 48);
+
+        Formatter formatter = new Formatter();
+        formatter.format("%.2f", score);
+        textAlign(CENTER);
+        text(formatter.toString() + "s", 640, 48);
     }
 
     private void testingFrame() {
@@ -495,6 +537,7 @@ public class battleMain extends PApplet {
             if (fire_ctr == fire_rate) {
                 if (bullets.size() <= max_bullet) {
                     is_firing = true;
+                    effects.add(new Effects(temp_effect_red, p.getX() + 32, p.getY(), effect_res));
                     bullets.add(new Bullet(temp_bullet, p.getX() + bullet_distance, p.getY(), player_bullet_res, p.getATK()));
                 }
                 System.out.println("Test");
@@ -511,7 +554,7 @@ public class battleMain extends PApplet {
                 boolean hit = false;
                 if (enemies.size() > 0) {
                     for (int j = enemies.size() - 1; j >= 0; j--) {
-                        System.out.println("Hitbox " + i + ", " + j);
+//                        System.out.println("Hitbox " + i + ", " + j);
                         /* Penentuan hitbox */
                         int bounding_left = enemies.get(j).getX() - enemies.get(j).getRes() / 2;
                         int bounding_right = enemies.get(j).getX() + enemies.get(j).getRes() / 2;

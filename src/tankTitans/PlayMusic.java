@@ -5,11 +5,11 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import java.io.File;
 
-public class playMusic {
+public class PlayMusic {
     String file_path;
     Clip clip;
 
-    public playMusic(String filepath) {
+    public PlayMusic(String filepath) {
         this.file_path = filepath;
     }
 
