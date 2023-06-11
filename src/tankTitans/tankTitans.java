@@ -47,9 +47,7 @@ public class tankTitans extends PApplet {
     public void setup() {
         /* Backgrounds */
         frameRate(FPS);
-        bg_mainMenu = loadImage("src/assets/background/background_1.png");
-
-
+        bg_mainMenu = loadImage("src/assets/background/Main_Menu-1.png");
     }
 
     /**

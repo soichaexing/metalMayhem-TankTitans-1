@@ -12,13 +12,13 @@ public class Highscore extends PApplet {
     private static final int FPS = 60;
     /* Rounds */
     private boolean is_highScore = true;
-    private boolean click_highScore = false;
 
     /**
      *  Round: High Score
      */
     private PImage bg_highScore;
     private GUIButton b_highscore = new GUIButton("Back",620, 400, 100, 75, Color.CYAN);
+    private boolean click_highScore = false;
 
     public static void main(String[] args) {
 
@@ -36,7 +36,7 @@ public class Highscore extends PApplet {
     public void setup() {
         /* Backgrounds */
         frameRate(FPS);
-        bg_highScore = loadImage("src/assets/background/background_1.png");
+        bg_highScore = loadImage("src/assets/background/Main_Menu-1.png");
     }
 
     /**
@@ -44,6 +44,10 @@ public class Highscore extends PApplet {
      */
 
     public void draw() {
+        textSize(100);
+        fill(255);
+        textAlign(CENTER,CENTER);
+        text("Kontol!!!", 200, 200);
         if (is_highScore) {
             update(mouseX, mouseY, b_highscore);
             background(bg_highScore);
@@ -62,7 +66,7 @@ public class Highscore extends PApplet {
     public void mousePressed(){
         if (click_highScore) {
             String[] args = {"runHighscore"};
-            PApplet.runSketch(args, new Highscore());
+            PApplet.runSketch(args, new tankTitans());
             surface.setVisible(false);
         }
     }
