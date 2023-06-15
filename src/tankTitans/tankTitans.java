@@ -14,7 +14,8 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
 import java.io.IOException;
-
+import ddf.minim.*;
+import ddf.minim.spi.*;
 
 /**
  * @author Michael
@@ -24,7 +25,8 @@ public class tankTitans extends PApplet {
     private static final int WIDTH = 1280;
     private static final int HEIGHT = 720;
     private static final int FPS = 60;
-
+    Minim minim;
+    AudioPlayer player;
     /* Rounds */
     private boolean is_mainMenu = true;
 
@@ -37,6 +39,7 @@ public class tankTitans extends PApplet {
     private GUIButton b_exit = new GUIButton(490, 500, 300, 75, Color.CYAN);
     private boolean click_playGame = false;
     private boolean click_highscore = false;
+
     public static void main(String[] args) {
         // TODO code application logic here
         PApplet.main("tankTitans.tankTitans");
@@ -54,7 +57,9 @@ public class tankTitans extends PApplet {
         /* Backgrounds */
         frameRate(FPS);
         bg_mainMenu = loadImage("src/assets/background/background_1.png");
-
+        minim = new Minim(this);
+        player = minim.loadFile("soundfile.mp3");
+        player.loop();
         
     }
 

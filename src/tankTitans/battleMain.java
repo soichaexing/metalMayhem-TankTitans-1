@@ -39,6 +39,7 @@ public class battleMain extends PApplet {
     /* Inialisasi untuk battle */
     /* List Unit/Entity seperti tank, bullet, dll. */
     /* Note : ganti jadi local variable supaya tidak boros memori */
+    private PlayMusic shoot;
     private PImage bg_battle;
     private Player p;
     private ArrayList<Bullet> bullets;
@@ -115,6 +116,9 @@ public class battleMain extends PApplet {
         for (int i = 0; i < temp_bullet_enemy.length; i++) {
             temp_bullet_enemy[i] = loadImage("src/assets/bullet/Idle/(" + (i + 1) + ").png");
         }
+
+        shoot = new PlayMusic("src/assets/sounds/Tank_fire-Sound_alerts.wav");
+        shoot.PlayMusic();
     }
 
     /**
@@ -131,6 +135,7 @@ public class battleMain extends PApplet {
                 throw new RuntimeException(e);
             }
             enemiesMechanism();
+
             frame_ctr++;
         }
     }
@@ -319,6 +324,7 @@ public class battleMain extends PApplet {
         if (fire) {
             if (fire_ctr == fire_rate) {
                 if (bullets.size() <= max_bullet) {
+
                     bullets.add(new Bullet(temp_bullet, p.getX() + bullet_distance, p.getY(), 64));
                 }
                 System.out.println("Test");
